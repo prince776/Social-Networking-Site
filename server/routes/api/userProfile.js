@@ -201,7 +201,7 @@ module.exports = (app) => {
 
 					user.save((err, doc) => {
 						if (err) {
-							return sendError(res, 'Failed to save profile Data to DB');
+							return sendError(res, err);
 						} else {
 							return res.send({
 								success: true,
@@ -245,7 +245,8 @@ module.exports = (app) => {
 		code = code.trim();
 		if (verficationCode === code) {
 			User.find({
-				email: email
+				email: email,
+				isDeleted: false
 			}, (err, previousUsers) => {
 				if (err) {
 					return sendError(res, "Server Error");

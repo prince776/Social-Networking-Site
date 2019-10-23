@@ -1,6 +1,19 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+var Friend = mongoose.Schema({
+	userID: {
+		type: String
+	},
+	username: {
+		type: String,
+	},
+	since: {
+		type: Date,
+		default: Date.now()
+	}
+});
+
 const UserSchema = new mongoose.Schema({
 	email: {
 		type: String,
@@ -41,7 +54,16 @@ const UserSchema = new mongoose.Schema({
 	isVerified: {
 		type: Boolean,
 		default: false
-	}
+	},
+	friendList: [{
+		type: Friend
+	}],
+	friendRequestsReceived: [{
+		type: Friend
+	}],
+	friendRequestsSent: [{
+		type: Friend
+	}]
 });
 
 //methods
