@@ -1,6 +1,8 @@
 var User = require('../../models/user.js');
 var UserSession = require('../../models/userSession.js');
-// var multer = require('multer');
+
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
 var sendError = (res, error) => {
 	return res.send({
@@ -9,6 +11,36 @@ var sendError = (res, error) => {
 	})
 }
 
+var verficationCode = "";
+
+function sendMail(targetEmail, subject, text) {
+
+	var transporter = nodemailer.createTransport(smtpTransport({
+		service: 'gmail',
+		host: 'smtp.gmail.com',
+		auth: {
+			user: 'accverf007@gmail.com',
+			pass: 'accountverifier007'
+		}
+	}));
+
+	var mailOptions = {
+		from: 'accverf007@gmail.com',
+		to: targetEmail,
+		subject: subject,
+		text: text
+	};
+	var toReturn;
+	transporter.sendMail(mailOptions, (err, info) => {
+		if (err) {
+			console.log(err);
+			toReturn = false;
+		}
+		toReturn = true;
+	});
+
+	return toReturn;
+}
 
 module.exports = (app) => {
 
@@ -53,7 +85,8 @@ module.exports = (app) => {
 						profileImg: user.profileImg,
 						address: user.address,
 						work: user.work,
-						workplace: user.workplace
+						workplace: user.workplace,
+						isVerified: user.isVerified
 					});
 				}
 			});
@@ -115,7 +148,7 @@ module.exports = (app) => {
 
 		});
 
-	app.post('/api/account/profile/profileData', (req, res) => {
+	app.post('/api/account/profile/editProfileData', (req, res) => {
 		var { body } = req;
 		var { token, username, address, work, workplace } = body;
 		console.log(username);
@@ -183,5 +216,63 @@ module.exports = (app) => {
 
 		});
 	});
+
+	app.post('/api/account/profile/reqVerificationCode', (req, res) => {
+		var { body } = req;
+		var { email } = body;
+		email = email.trim();
+		if (!email) {
+			return sendError(res, "Empty Email");
+		}
+
+		var code = Math.random() * 100000;
+		code = Math.floor(code);
+		verficationCode = code + "";
+		var sent = sendMail(email, "Verification Code", verficationCode);
+		if (sent) {
+			return res.send({
+				success: true,
+				message: 'Email Verification Code'
+			})
+		} else {
+			return sendError(res, "Can't Send Verification Code");
+		}
+	});
+
+	app.post('/api/account/profile/verifyEmail', (req, res) => {
+		var { body } = req;
+		var { code, email } = body;
+		code = code.trim();
+		if (verficationCode === code) {
+			User.find({
+				email: email
+			}, (err, previousUsers) => {
+				if (err) {
+					return sendError(res, "Server Error");
+				} else if (previousUsers.length < 1) {
+					return sendError(res, "User Not Found");
+				} else {
+					var user = previousUsers[0];
+
+					user.isVerified = true;
+
+					user.save((err, doc) => {
+						if (err) {
+							return sendError(res, "Server Error");
+						} else {
+							return res.send({
+								success: true,
+								message: "Email Verified Successfully"
+							});
+						}
+					})
+
+				}
+			})
+		} else {
+			return sendError(res, "Wrong Verification Code");
+		}
+
+	})
 
 }
