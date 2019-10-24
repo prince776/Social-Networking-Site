@@ -36,6 +36,7 @@ app.get('/', (req, res, next) => {
 require('./routes/api/user.js')(app);
 require('./routes/api/userProfile.js')(app);
 require('./routes/api/userFriend.js')(app);
+require('./routes/api/others.js')(app);
 //listen on port
 app.listen(port, () => {
 	console.log(`Server is running on port: ${port}`);
