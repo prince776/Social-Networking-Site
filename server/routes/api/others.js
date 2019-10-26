@@ -48,6 +48,36 @@ module.exports = (app) => {
 
     })
 
+    app.post('/api/allUsers', (req, res) => {
+
+        var { body } = req;
+        // var {data} = body; //when something that decides how many users has to be sent and of what category then
+
+        User.find({
+            isDeleted: false
+        }, (err, users) => {
+            if (err) {
+                return sendError(res, "Server error");
+            } else if (users.length < 1) {
+                return sendError(res, "No Users Found");
+            } else {
+
+                users = users.map(user => {
+                    user.password = '';
+                    return user;
+                })
+
+                return res.send({
+                    success: true,
+                    message: 'Users fetched succesfully',
+                    users: users
+                });
+
+            }
+        })
+
+    })
+
 }
 
 

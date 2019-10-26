@@ -7,6 +7,7 @@ import Test from './components/Test.js'
 import SignIn from './components/SignIn/SignIn.js'
 import Friends from './components/Profile/Friends/Friends.js'
 import ViewUser from './components/ViewUser/ViewUser.js'
+import BrowseUsers from './components/BrowseUsers/BrowseUsers.js'
 
 const Main = () => (
 	<Switch>
@@ -16,6 +17,7 @@ const Main = () => (
 		<Route exact path='/test' component={Test}></Route>
 		<Route exact path='/profile/friends' component={Friends}></Route>
 		<Route exact path='/viewUser/:userID' component={ViewUser}></Route>
+		<Route exact path='/browseUsers' component={BrowseUsers}></Route>
 	</Switch>
 );
 
