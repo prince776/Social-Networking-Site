@@ -55,6 +55,7 @@ module.exports = (app) => {
                     isVerified: user.isVerified,
                     message: "Succesfully fetched User data",
                     token: tokenToSend,
+                    userID: user._id
                 });
 
             }

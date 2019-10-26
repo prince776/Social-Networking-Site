@@ -32,7 +32,26 @@ class ViewUser extends Component {
     }
 
     onAddFriendButtonPressed = () => {
-        //fetch
+
+        const { userID, token } = this.state;
+
+        fetch('http://localhost:8080/api/account/addFriend'
+            , {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    targetUserID: userID,
+                    token: token
+                })
+            }).then((res) => res.json()).then((json) => {
+                this.setState({
+                    message: json.message,
+                })
+            });
+
     }
 
     render() {
