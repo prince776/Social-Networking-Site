@@ -18,7 +18,6 @@ mongoose.connect(config.mongodb, (err, docs) => {
 
 mongoose.Promise = global.Promise;
 
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));

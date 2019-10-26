@@ -10,22 +10,20 @@ var sendError = (res, error) => {
 
 module.exports = (app) => {
 
-    app.post('/api/viewProfile', (req, res) => {
+    app.post('/api/viewUser', (req, res) => {
         var { body } = req;
-        var { email } = body;
-        console.log(email);
-        // email = email.trim();
+        var { userID } = body;
 
-        if (!email) {
-            return sendError(res, "Provide Email");
+        if (!userID) {
+            return sendError(res, "Provide Correct User");
         }
 
         User.find({
-            email: email,
+            _id: userID,
             isDeleted: false
         }, (err, previousUsers) => {
             if (err) {
-                return sendError(res, "Server Error");
+                return sendError(res, `Error:${err}`);
             } else if (previousUsers.length < 1) {
                 return sendError(res, "Email not found");
             } else {

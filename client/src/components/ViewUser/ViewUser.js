@@ -11,7 +11,8 @@ class ViewUser extends Component {
         username: '',
         signUpDate: '',
         // email: localStorage.getItem('targetEmail') ? localStorage.getItem('targetEmail') : '-1',
-        email: '1',
+        email: '',
+        userID: '',
         token: localStorage.getItem('signInToken') ? localStorage.getItem('signInToken') : '-1',
         message: '',
         redirect: '',
@@ -23,18 +24,20 @@ class ViewUser extends Component {
     }
 
     componentDidMount() {
+        console.log('view user.js');
         this.setState({
             isLoading: true,
+            userID: this.props.match.params.userID
         })
     }
 
     render() {
 
-        const { token, redirect, isLoading, username, email, isVerified, address, message, signUpDate, workplace, work, profileImg } = this.state;
+        const { userID, redirect, isLoading, username, email, isVerified, address, message, signUpDate, workplace, work, profileImg } = this.state;
 
-        if (token && email && isLoading) {
+        if (userID && isLoading) {
 
-            fetch('http://localhost:8080/api/viewProfile'
+            fetch('http://localhost:8080/api/viewUser'
                 , {
                     method: 'POST',
                     headers: {
@@ -42,7 +45,7 @@ class ViewUser extends Component {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: email
+                        userID: userID
                     })
                 }).then((res) => res.json()).then((json) => {
 
@@ -62,14 +65,15 @@ class ViewUser extends Component {
                     } else {
                         this.setState({
                             isLoading: false,
-                            redirect: '/'
+                            message: json.message
+                            // redirect: '/'
                         });
                     }
                 });
         }
 
         if (isLoading) {
-            return <p>Loading....</p>
+            return <p>Loading in ViewUser....</p>
         }
 
         if (redirect) {

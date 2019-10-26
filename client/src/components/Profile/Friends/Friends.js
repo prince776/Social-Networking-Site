@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Friends.css'
 import ProfileNavbar from './../ProfileNavbar.js'
 
@@ -20,6 +20,10 @@ class Friends extends Component {
         this.setState({
             isLoading: true
         });
+    }
+
+    onFriendClicked = (e) => {
+
     }
 
     render() {
@@ -58,68 +62,71 @@ class Friends extends Component {
 
                 <Fragment>
                     <h3>Your Friends</h3>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Since</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {friendList.map(friend => (
-                            <tr key={friend.username}>
-                                <td>{friend.username}</td>
-                                <td>{friend.since}</td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Since</th>
                             </tr>
-                        ))}
+                        </thead>
 
-                    </tbody>
+                        <tbody>
 
+                            {friendList.map(friend => (
+                                <tr key={friend.username}>
+                                    <td><Link to={`../viewUser/${friend.userID}`}>{friend.username}</Link></td>
+                                    <td>{friend.since}</td>
+                                </tr>
+                            ))}
+
+                        </tbody>
+                    </table>
                 </Fragment>
                 <br />
                 <Fragment>
                     <h3>Friend Requests For You</h3>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Since</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {friendRequestsReceived.map(friend => (
-                            <tr key={friend.username}>
-                                <td>{friend.username}</td>
-                                <td>{friend.since}</td>
+                    <table >
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Since</th>
                             </tr>
-                        ))}
+                        </thead>
 
-                    </tbody>
+                        <tbody>
 
+                            {friendRequestsReceived.map(friend => (
+                                <tr key={friend.username}>
+                                    <td><Link to={`../viewUser/${friend.userID}`}>{friend.username}</Link></td>
+                                    <td>{friend.since}</td>
+                                </tr>
+                            ))}
+
+                        </tbody>
+                    </table>
                 </Fragment>
                 <br />
                 <Fragment>
                     <h3>Friend Requests You Sent</h3>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Since</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {friendRequestsSent.map(friend => (
-                            <tr key={friend.username}>
-                                <td>{friend.username}</td>
-                                <td>{friend.since}</td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Since</th>
                             </tr>
-                        ))}
+                        </thead>
 
-                    </tbody>
+                        <tbody>
 
+                            {friendRequestsSent.map(friend => (
+                                <tr key={friend.username}>
+                                    <td><Link to={`../viewUser/${friend.userID}`}>{friend.username}</Link></td>
+                                    <td>{friend.since}</td>
+                                </tr>
+                            ))}
+
+                        </tbody>
+                    </table>
                 </Fragment>
 
             </div>

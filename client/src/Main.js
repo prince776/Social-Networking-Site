@@ -15,7 +15,7 @@ const Main = () => (
 		<Route exact path='/signIn' component={SignIn}></Route>
 		<Route exact path='/test' component={Test}></Route>
 		<Route exact path='/profile/friends' component={Friends}></Route>
-		<Route exact path='/viewProfile' component={ViewUser}></Route>
+		<Route exact path='/viewUser/:userID' component={ViewUser}></Route>
 	</Switch>
 );
 
