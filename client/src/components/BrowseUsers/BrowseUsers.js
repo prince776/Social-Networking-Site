@@ -7,6 +7,7 @@ class BrowseUsers extends Component {
         isLoading: false,
         users: [],
         message: '',
+        token: localStorage.getItem('signInToken'),
     }
 
     componentDidMount() {
@@ -17,7 +18,7 @@ class BrowseUsers extends Component {
 
     render() {
 
-        const { isLoading, message, users } = this.state;
+        const { isLoading, message, users, token } = this.state;
 
         if (isLoading) {
 
@@ -29,7 +30,7 @@ class BrowseUsers extends Component {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-
+                        token: token
                     })
                 }).then((res) => res.json()).then((json) => {
                     console.log(json.users);

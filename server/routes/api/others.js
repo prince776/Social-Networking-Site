@@ -12,7 +12,7 @@ module.exports = (app) => {
 
     app.post('/api/viewUser', (req, res) => {
         var { body } = req;
-        var { userID } = body;
+        var { userID, token } = body;
 
         if (!userID) {
             return sendError(res, "Provide Correct User");
@@ -29,6 +29,19 @@ module.exports = (app) => {
             } else {
 
                 var user = previousUsers[0];
+                var tokenToSend = token;
+                UserSession.find({
+                    _id: token,
+                    isDeleted: false
+                }, (err, previousSessions) => {
+                    if (err) {
+                        tokenToSend = '';
+                    } else if (previousSessions.length < 1) {
+                        tokenToSend = '';
+                    } else {
+                        tokenToSend = token;
+                    }
+                })
 
                 return res.send({
                     success: true,
@@ -40,7 +53,8 @@ module.exports = (app) => {
                     workplace: user.workplace,
                     work: user.work,
                     isVerified: user.isVerified,
-                    message: "Succesfully fetched User data"
+                    message: "Succesfully fetched User data",
+                    token: tokenToSend,
                 });
 
             }
@@ -52,7 +66,7 @@ module.exports = (app) => {
 
         var { body } = req;
         // var {data} = body; //when something that decides how many users has to be sent and of what category then
-
+        var { token } = body;
         User.find({
             isDeleted: false
         }, (err, users) => {
@@ -70,7 +84,7 @@ module.exports = (app) => {
                 return res.send({
                     success: true,
                     message: 'Users fetched succesfully',
-                    users: users
+                    users: users,
                 });
 
             }

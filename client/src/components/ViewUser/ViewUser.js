@@ -13,7 +13,7 @@ class ViewUser extends Component {
         // email: localStorage.getItem('targetEmail') ? localStorage.getItem('targetEmail') : '-1',
         email: '',
         userID: '',
-        token: localStorage.getItem('signInToken') ? localStorage.getItem('signInToken') : '-1',
+        token: localStorage.getItem('signInToken') ? localStorage.getItem('signInToken') : '',
         message: '',
         redirect: '',
         profileImg: '',
@@ -31,9 +31,13 @@ class ViewUser extends Component {
         })
     }
 
+    onAddFriendButtonPressed = () => {
+        //fetch
+    }
+
     render() {
 
-        const { userID, redirect, isLoading, username, email, isVerified, address, message, signUpDate, workplace, work, profileImg } = this.state;
+        const { token, userID, redirect, isLoading, username, email, isVerified, address, message, signUpDate, workplace, work, profileImg } = this.state;
 
         if (userID && isLoading) {
 
@@ -45,7 +49,8 @@ class ViewUser extends Component {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        userID: userID
+                        userID: userID,
+                        token: token
                     })
                 }).then((res) => res.json()).then((json) => {
 
@@ -60,12 +65,14 @@ class ViewUser extends Component {
                             workplace: json.workplace,
                             work: json.work,
                             profileImg: json.profileImg,
-                            isLoading: false
+                            isLoading: false,
+                            token: json.token,
                         });
                     } else {
                         this.setState({
                             isLoading: false,
-                            message: json.message
+                            message: json.message,
+                            token: json.token
                             // redirect: '/'
                         });
                     }
@@ -79,12 +86,15 @@ class ViewUser extends Component {
         if (redirect) {
             return <Redirect to={redirect}></Redirect>
         }
+        var addFriendButton = <button onClick={this.onAddFriendButtonPressed}>Add Friend</button>;
+
 
         return (
             <div>
                 <ProfileNavbar />
                 <h3>Viewing Profile of {username}</h3>
                 <br />
+                {token ? addFriendButton : ''}
                 <img src={profileImg} className='profileImg' />
                 <h4>Name: {username}</h4>
                 <h4>Email: {email}  Verified: {isVerified ? "YES" : "NO"}</h4>
