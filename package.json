@@ -15,7 +15,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.7.6",
     "multer": "^1.4.2",
-    "nodemailer": "^6.3.1",
+    "nodemailer": "^6.4.16",
     "nodemailer-smtp-transport": "^2.7.4",
     "react-file-base64": "^1.0.3",
     "react-router": "^5.1.2",
